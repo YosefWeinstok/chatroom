@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <script>
+
+
+        (function () {
+            document.addEventListener('DOMContentLoaded', handler, false);
+
+            function handler() {
+                myFunc()
+            }
+    //Send the search request as a fetch request
+            function myFunc() {
+                const myForm = document.getElementById("form1");
+                myForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+
+                    fetch("/searchByUserName", {
+                        method: 'post',
+                        body: formData
+                    })
+                        .then(res => res.json())
+                        .then(resp => {
+                            console.log("I'm here");
+                            res = "";
+                            for (el of resp) {
+
+
+                                res = res + "<br/><p class=\" m-2 p-2 border rounded\" style=\"background-color: aquamarine\"\n" +
+                                    "><b>" + el.userName + ": &nbsp</b> " + el.msg + "</p>";
+                            }
+                            ;
+                            document.getElementById("data").innerHTML = res;
+                        })
+                        .catch(e => {
+                            document.getElementById("data").innerHTML = "Some error occured!";
+                        });
+                    document.getElementById('searchByUserName').value = "";
+                })
+
+                const myForm2 = document.getElementById("form2");
+                myForm2.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+
+                    fetch("/searchByMsg", {
+                        method: 'post',
+                        body: formData
+                    })
+                        .then(res => res.json())
+                        .then(resp => {
+                            console.log("I'm here");
+                            res = "";
+                            for (el of resp) {
+
+
+                                res = res + "<br/><p class=\" m-2 p-2 border rounded\" style=\"background-color: aquamarine\"\n" +
+                                    "><b>" + el.userName + ": &nbsp</b> " + el.msg + "</p>";
+                            }
+                            ;
+                            document.getElementById("data").innerHTML = res;
+                        })
+                        .catch(e => {
+                            document.getElementById("data").innerHTML = "Some error occured!";
+                        });
+                    document.getElementById('searchByMsg').value = "";
+                })
+            }
+        }())
+
+    </script>
+</head>
+<body class="bg-light">
+<div class="container justify-content-center mt-5 p-4 w-50 h-50 border bg-white rounded">
+    <a class="btn btn-outline-primary m-3" href="http://localhost:8080/">back to chatroom</a>
+    <div class="row m-3">
+        <div class="col">
+            <form id="form1">
+                <div class="input-group">
+                    <input class="form-control" type="text" id="searchByUserName" name="searchByUserName"
+                           placeholder="search By User Name:">
+                    <div class="input-group-append">
+                        <input class="btn btn-outline-primary" type="submit" value="search">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col">
+            <form id="form2">
+                <div class="input-group">
+                    <input class="form-control" type="text" id="searchByMsg" name="searchByMsg"
+                           placeholder="search By Message:">
+                    <div class="input-group-append">
+                        <input class="btn btn-outline-primary" type="submit" value="search">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="data" class="border rounded ">
+
+    </div>
+</div>
+
+</div>
+</body>
+</html>
